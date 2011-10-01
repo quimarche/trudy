@@ -63,11 +63,11 @@ class Trudy < Sinatra::Base
     [0x7F]
   end
 
-  def trudy_packet_mu_message url
-    trudy_packet_head + trudy_packet_mu_message_block(url) + trudy_packet_foot
+  def trudy_packet_message url
+    trudy_packet_head + trudy_packet_message_block(url) + trudy_packet_foot
   end
 
-  def trudy_packet_mu_message_block url
+  def trudy_packet_message_block url
     trudy_obfuscated_message = trudy_obfuscate_message "ID 0\nMU #{ENV['TRUDY_HOST']}/#{url}"
     [0x0A, 0x00, 0x00, trudy_obfuscated_message.length] + trudy_obfuscated_message
   end
@@ -106,7 +106,7 @@ class Trudy < Sinatra::Base
       send_packet trudy_packet_ping PING_SECONDS
     else
       if queue.message_count > 0
-        send_packet trudy_packet_mu_message queue.pop[:payload]
+        send_packet trudy_packet_message queue.pop[:payload]
       else
         send_packet trudy_packet_ambient AMBIENT_FREQUENCY
       end
