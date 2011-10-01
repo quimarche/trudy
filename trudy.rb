@@ -32,8 +32,8 @@ class Trudy < Sinatra::Base
     byte_array.pack('c*')
   end
 
-  def trudy_file fileName
-    File.join 'files', fileName
+  def trudy_file filename
+    File.join 'files', filename
   end
 
   def trudy_ambient frequency
