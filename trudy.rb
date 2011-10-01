@@ -28,8 +28,8 @@ class Trudy < Sinatra::Base
     @queue ||= client.queue(QUEUE_NAME)
   end
 
-  def send_packet packet
-    packet.pack('c*')
+  def send_byte_array byte_array
+    byte_array.pack('c*')
   end
 
   def trudy_file fileName
@@ -108,12 +108,12 @@ class Trudy < Sinatra::Base
 
   get '/vl/p4.jsp' do
     if params[:st] == 0
-      send_packet trudy_packet_ping PING_SECONDS
+      send_byte_array trudy_packet_ping PING_SECONDS
     else
       if queue.message_count > 0
-        send_packet trudy_packet_message queue.pop[:payload]
+        send_byte_array trudy_packet_message queue.pop[:payload]
       else
-        send_packet trudy_packet_ambient AMBIENT_FREQUENCY
+        send_byte_array trudy_packet_ambient AMBIENT_FREQUENCY
       end
     end
   end
@@ -123,7 +123,7 @@ class Trudy < Sinatra::Base
   end
 
   get '/:filename.nab' do
-    send_packet trudy_packet_choreography params[:filename]
+    send_byte_array trudy_packet_choreography params[:filename]
   end
 
   get '/:filename' do
