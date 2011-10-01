@@ -8,7 +8,7 @@ require 'sinatra/base'
 # heroku config:add TRUDY_QUEUE=<queue-name>
 
 class Trudy < Sinatra::Base
-  AMBIENT_FREQUENCY = 2
+  AMBIENT_FREQUENCY = 1
   PING_SECONDS = 30
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
