@@ -5,11 +5,12 @@ require 'sinatra/base'
 
 # heroku addons:add rabbitmq
 # heroku config:add TRUDY_HOST=<app_name>.heroku.com
+# heroku config:add TRUDY_QUEUE=<queue-name>
 
 class Trudy < Sinatra::Base
   AMBIENT_FREQUENCY = 2
   PING_SECONDS = 30
-  QUEUE_NAME = 'messages'
+  QUEUE_NAME = ENV['TRUDY_QUEUE']
 
   def client
     unless @client
