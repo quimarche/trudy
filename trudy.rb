@@ -9,7 +9,7 @@ require 'sinatra/base'
 
 class Trudy < Sinatra::Base
   AMBIENT_FREQUENCY = 1
-  PING_SECONDS = 30
+  PING_SECONDS = 15
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
   def client
