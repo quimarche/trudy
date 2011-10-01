@@ -63,12 +63,12 @@ class Trudy < Sinatra::Base
     [0x7F]
   end
 
-  def trudy_packet_message url
-    trudy_packet_head + trudy_packet_message_block(url) + trudy_packet_foot
+  def trudy_packet_message status
+    trudy_packet_head + trudy_packet_message_block(status) + trudy_packet_foot
   end
 
-  def trudy_packet_message_block url
-    trudy_obfuscated_message = trudy_obfuscate_message "ID 0\nMU #{ENV['TRUDY_HOST']}/#{url}"
+  def trudy_packet_message_block status
+    trudy_obfuscated_message = trudy_obfuscate_message "ID 0\nMU #{ENV['TRUDY_HOST']}/#{status}.mp3"
     [0x0A, 0x00, 0x00, trudy_obfuscated_message.length] + trudy_obfuscated_message
   end
 
@@ -89,7 +89,7 @@ class Trudy < Sinatra::Base
   end
 
   post '/' do
-    exchange.publish params[:buildResult] + '.mp3', :key => QUEUE_NAME
+    exchange.publish params[:buildResult], :key => QUEUE_NAME
     status 201
   end
 
