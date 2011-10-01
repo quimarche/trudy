@@ -68,7 +68,7 @@ class Trudy < Sinatra::Base
   end
 
   def trudy_packet_message_block status
-    trudy_obfuscated_message = trudy_obfuscate_message "ID 0\nMU #{ENV['TRUDY_HOST']}/#{status}.mp3"
+    trudy_obfuscated_message = trudy_obfuscate_message "ID 0\nMU #{ENV['TRUDY_HOST']}/#{status}.mp3\nCH #{ENV['TRUDY_HOST']}/#{status}.nab"
     [0x0A, 0x00, 0x00, trudy_obfuscated_message.length] + trudy_obfuscated_message
   end
 
