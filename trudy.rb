@@ -3,8 +3,8 @@ require 'haml'
 require 'sass'
 require 'sinatra/base'
 
-# heroku addons:add rabbitmq
-# heroku config:add TRUDY_HOST=<app_name>.heroku.com
+# heroku addons:add rabbitmq-bigwig:pipkin
+# heroku config:add TRUDY_HOST=<app_name>.herokuapp.com
 # heroku config:add TRUDY_QUEUE=<queue-name>
 
 class Trudy < Sinatra::Base
@@ -14,7 +14,7 @@ class Trudy < Sinatra::Base
 
   def client
     unless @client
-      @client = Bunny.new(ENV['RABBITMQ_URL'])
+      @client = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
       @client.start
     end
     @client
