@@ -12,6 +12,10 @@ class Trudy < Sinatra::Base
   PING_SECONDS = 15
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
+  def channel
+    @channel ||= client.create_channel
+  end
+
   def client
     unless @client
       @client = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
@@ -21,11 +25,11 @@ class Trudy < Sinatra::Base
   end
 
   def exchange
-    @exchange ||= client.exchange('')
+    @exchange ||= channel.default_exchange
   end
 
   def queue
-    @queue ||= client.queue(QUEUE_NAME)
+    @queue ||= channel.queue(QUEUE_NAME, :auto_delete => true)
   end
 
   def send_byte_array byte_array
