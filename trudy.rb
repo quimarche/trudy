@@ -1,6 +1,5 @@
 require 'bunny'
 require 'haml'
-require 'sass'
 require 'sinatra/base'
 
 # heroku addons:add rabbitmq-bigwig:pipkin
@@ -123,7 +122,7 @@ class Trudy < Sinatra::Base
   end
 
   get '/index.css' do
-    sass :index
+    send_file trudy_file 'index.css'
   end
 
   get '/:filename.nab' do
