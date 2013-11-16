@@ -114,7 +114,8 @@ class Trudy < Sinatra::Base
       send_byte_array trudy_ping PING_SECONDS
     else
       if queue.message_count > 0
-        send_byte_array trudy_message queue.pop[:payload]
+        delivery_info, properties, payload = queue.pop
+        send_byte_array trudy_message payload
       else
         send_byte_array trudy_ambient AMBIENT_FREQUENCY
       end
