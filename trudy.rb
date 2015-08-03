@@ -6,6 +6,8 @@ require 'sinatra/base'
 # heroku config:add TRUDY_HOST=<app_name>.herokuapp.com
 # heroku config:add TRUDY_QUEUE=<queue-name>
 
+# POST https://trudy-1.herokuapp.com?buildResult=success
+
 class Trudy < Sinatra::Base
   AMBIENT_FREQUENCY = 1
   PING_SECONDS = 60
