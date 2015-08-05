@@ -20,19 +20,19 @@ class Trudy < Sinatra::Base
   PING_SECONDS = 60
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
-  def channel
-    unless @channel
-      @channel = client.create_channel
+  def bunny
+    unless @bunny
+      @bunny = Bunny.new(:hostname => ENV['RABBITMQ_BIGWIG_URL'])
+      @bunny.start
     end
-    @channel
+    @bunny
   end
 
-  def client
-    unless @client
-      @client = Bunny.new(:hostname => ENV['RABBITMQ_BIGWIG_URL'])
-      @client.start
+  def channel
+    unless @channel
+      @channel = bunny.create_channel
     end
-    @client
+    @channel
   end
 
   def exchange
