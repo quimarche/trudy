@@ -22,7 +22,7 @@ class Trudy < Sinatra::Base
 
   def bunny
     unless @bunny
-      @bunny = Bunny.new(:hostname => ENV['RABBITMQ_BIGWIG_URL'])
+      @bunny = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
       @bunny.start
     end
     @bunny
