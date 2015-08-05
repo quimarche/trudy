@@ -21,11 +21,12 @@ class Trudy < Sinatra::Base
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
   def initialize
-    @bunny = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
-    @bunny.start
-    @channel = @bunny.create_channel
-    @exchange = @channel.default_exchange
-    @queue = @channel.queue(QUEUE_NAME)
+    super
+    bunny = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
+    bunny.start
+    channel = bunny.create_channel
+    @exchange = channel.default_exchange
+    @queue = channel.queue(QUEUE_NAME)
   end
 
   def send_byte_array byte_array
