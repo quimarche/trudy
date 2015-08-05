@@ -21,23 +21,32 @@ class Trudy < Sinatra::Base
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
   def channel
-    @channel ||= client.create_channel
+    unless @channel
+      @channel = client.create_channel
+    end
+    @channel
   end
 
   def client
     unless @client
-      @client = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
+      @client = Bunny.new(:hostname => ENV['RABBITMQ_BIGWIG_URL'])
       @client.start
     end
     @client
   end
 
   def exchange
-    @exchange ||= channel.default_exchange
+    unless @exchange
+      @exchange = channel.default_exchange
+    end
+    @exchange
   end
 
   def queue
-    @queue ||= channel.queue(QUEUE_NAME, :auto_delete => true)
+    unless @queue
+      @queue = channel.queue(QUEUE_NAME)
+    end
+    @queue
   end
 
   def send_byte_array byte_array
@@ -106,7 +115,7 @@ class Trudy < Sinatra::Base
   end
 
   post '/' do
-    exchange.publish params[:buildResult], :key => QUEUE_NAME
+    exchange.publish params[:buildResult], :routing_key => QUEUE_NAME
     status 201
   end
 
