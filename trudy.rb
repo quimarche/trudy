@@ -8,6 +8,13 @@ require 'sinatra/base'
 
 # POST https://trudy-1.herokuapp.com?buildResult=success
 
+# Add a TeamCity webhook with the following parameters:
+# URL: https://trudy-1.herokuapp.com
+# Enabled: true
+# On completion - trigger when build is sccessful: true
+# On completion - trigger when build fails: true
+# Payload format: name value pairs
+
 class Trudy < Sinatra::Base
   AMBIENT_FREQUENCY = 1
   PING_SECONDS = 60
