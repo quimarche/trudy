@@ -44,7 +44,7 @@ class Trudy < Sinatra::Base
 
   def queue
     unless @queue
-      @queue = channel.queue(QUEUE_NAME)
+      @queue = channel.queue(QUEUE_NAME, :auto_delete => true)
     end
     @queue
   end
