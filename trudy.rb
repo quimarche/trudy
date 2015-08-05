@@ -20,33 +20,12 @@ class Trudy < Sinatra::Base
   PING_SECONDS = 60
   QUEUE_NAME = ENV['TRUDY_QUEUE']
 
-  def bunny
-    unless @bunny
-      @bunny = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
-      @bunny.start
-    end
-    @bunny
-  end
-
-  def channel
-    unless @channel
-      @channel = bunny.create_channel
-    end
-    @channel
-  end
-
-  def exchange
-    unless @exchange
-      @exchange = channel.default_exchange
-    end
-    @exchange
-  end
-
-  def queue
-    unless @queue
-      @queue = channel.queue(QUEUE_NAME, :auto_delete => true)
-    end
-    @queue
+  def initialize
+    @bunny = Bunny.new(ENV['RABBITMQ_BIGWIG_URL'])
+    @bunny.start
+    @channel = @bunny.create_channel
+    @exchange = @channel.default_exchange
+    @queue = @channel.queue(QUEUE_NAME)
   end
 
   def send_byte_array byte_array
@@ -115,7 +94,7 @@ class Trudy < Sinatra::Base
   end
 
   post '/' do
-    exchange.publish params[:buildResult], :routing_key => QUEUE_NAME
+    @exchange.publish params[:buildResult], :routing_key => QUEUE_NAME
     status 201
   end
 
@@ -131,8 +110,8 @@ class Trudy < Sinatra::Base
     if params[:st] == 0
       send_byte_array trudy_ping PING_SECONDS
     else
-      if queue.message_count > 0
-        delivery_info, properties, payload = queue.pop
+      if @queue.message_count > 0
+        delivery_info, properties, payload = @queue.pop
         send_byte_array trudy_message payload
       else
         send_byte_array trudy_ambient AMBIENT_FREQUENCY
