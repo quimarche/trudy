@@ -6,8 +6,8 @@ GEM
       amq-protocol (>= 1.9.2)
     haml (4.0.4)
       tilt
-    rack (1.5.2)
-    rack-protection (1.5.1)
+    rack (1.6.11)
+    rack-protection (1.5.5)
       rack
     sinatra (1.4.4)
       rack (~> 1.4)
